@@ -50,6 +50,4 @@ export default class MessageService {
             request.send(JSON.stringify(message));
         });
     }
-
-
 }

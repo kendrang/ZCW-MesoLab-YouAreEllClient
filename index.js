@@ -1,60 +1,48 @@
-import MessageService from "./message-service";
-
-
-
+import MessageService from "./message-service.js";
 let userId = "kendrang";
-
-const messageService = new MessageService(userId);
-
+const messageService = new MessageService();
+createFormListener();
 window.addEventListener("load", function () {
     document.getElementById("greeting").innerHTML = `Welcome ${userId}!`;
     messageService.getAllMessages()
         .then(successCallback, errorCallback);
-
     function successCallback(response) {
         // This data comes from the resolve method
-        populateMessages(response);
+        populateThread(response);
     }
-
     function errorCallback(response) {
         // This data comes from the reject method
         console.log(response);
     }
 });
-
-function populateMessages(messages) {
+function populateThread(messages) {
     messages.forEach(message => {
         addMessageToThread(message);
-    })
+    });
 }
-
 function createFormListener() {
+    console.log("listening");
     const form = document.getElementById("new-message-form");
-
     form.onsubmit = function (event) {
         // stop the regular form submission
         event.preventDefault();
-
+        console.log("subbed");
         const data = {
             fromid: userId,
             message: form.message.value
         };
-
         messageService.createNewMessage(data)
             .then(successCallback, errorCallback);
-
         function successCallback(response) {
             // This data comes from the resolve method
             addMessageToThread(response);
         }
-
         function errorCallback(response) {
             // This data comes from the reject method
             console.log(response);
         }
     }
-};
-
+}
 function addMessageToThread(message) {
     const messageListItem = document.createElement("LI");
     const userIdHeading = document.createElement("h3");
